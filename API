@@ -1,0 +1,24 @@
+ public function getLikeKolVideo() : void
+    {
+        $iResult = Base::BASE_ERROR;  //CODE
+        try {
+            $aData = $this->aRequest;  //参数
+            //验证参数
+            if (empty($aData['source_ids']) || empty($aData['pageStart']) || empty($aData['pageLimit'])){
+                $iResult = Base::BASE_ERROR;
+            }else{
+                $bRes = $this->Video_model->searchKolVideo($aData);   //相应结果，返回数据
+                $iResult = Base::BASE_SUCCESS;
+            }
+        } catch (Exception $e) {
+            Logger::warning('getLikeKolVideo', $this->aRequest, array(
+                "iExceptionCode" => $e->getCode(),
+                "iExceptionMsg" => $e->getMessage(),
+                "iExceptionFile" => $e->getFile(),
+                "iExceptionLine" => $e->getLine(),
+                "iExceptionTrace" => $e->getTraceAsString(),
+            ));
+        } finally {
+            $this->formatOutput($iResult, $bRes);  //（code,data)
+        }
+    }
